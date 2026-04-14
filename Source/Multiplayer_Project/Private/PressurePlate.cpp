@@ -36,20 +36,23 @@ void APressurePlate::Tick(float DeltaTime)
 
  void APressurePlate::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (!HasAuthority()) return;
+	 if (!HasAuthority()) return;
 
-	AMultiplayer_ProjectCharacter* Char = Cast<AMultiplayer_ProjectCharacter>(OtherActor);
+	 AMultiplayer_ProjectCharacter* Char = Cast<AMultiplayer_ProjectCharacter>(OtherActor);
 
-	if (Char)
-	{
-		CurrentPlayerCount++;
+	 if (Char)
+	 {
+		 CurrentPlayerCount++;
 
-		// Timer cancel 
-		GetWorld()->GetTimerManager().ClearTimer(CloseTimer);
+		 // Timer cancel 
+		 GetWorld()->GetTimerManager().ClearTimer(CloseTimer);
 
-		//Always open (state-based)
-		OpenGates();
-	}
+		 // Only open if enough players
+		 if (CurrentPlayerCount >= RequiredPlayerCount)
+		 {
+			 OpenGates();
+		 }
+	 }
 }
 
 void APressurePlate::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
